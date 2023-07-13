@@ -7,14 +7,22 @@ enum MessageOne {
     Write(String),
     ChangeColor(i32, i32, i32),
 }
+
 fn show_message(msg: MessageOne) {
-    println!("{}", msg);
+    //println!("{}", msg);
+   match msg {
+        MessageOne::Quit => println!("Quit"),
+        MessageOne::Move { x, y } => println!("Move ({},{})",x,y),
+        MessageOne::Write(Str)=> println!("Message: {}",Str),
+        MessageOne::ChangeColor(r, g, b) => println!("Color: ({},{},{})",r,g,b),
+   }
 }
 
 fn exercise1() {
-    let msgs: __ = [
+    let msgs:[MessageOne;4]  = [
         MessageOne::Quit,
         MessageOne::Move { x: 1, y: 3 },
+        MessageOne::Write(String::from("Message")),
         MessageOne::ChangeColor(255, 255, 0),
     ];
 
@@ -29,6 +37,10 @@ fn exercise1() {
 // Run tests
 enum Message {
     // TODO: implement the message variant types based on their usage below
+    ChangeColor(u8,u8,u8),
+    Move(Point),
+    Quit,
+    Echo(String),
 }
 
 struct Point {
@@ -61,6 +73,12 @@ impl State {
 
     fn process(&mut self, message: Message) {
         // TODO: create a match expression to process the different message variants
+        match message {
+            Message::ChangeColor(r, g, b) => self.change_color((r,g,b)),
+            Message::Move(pos) => self.move_position(pos),
+            Message::Echo(Str) => self.echo(Str),
+            Message::Quit => self.quit(),
+        }
         // Remember: When passing a tuple as a function argument, you'll need extra parentheses: fn function((t, u, p, l, e))
     }
 }
@@ -80,6 +98,19 @@ impl Direction {
     fn opposite(&self) -> Direction {
         match self {
             //TODO
+            Direction::North => Direction::South,
+            Direction::South => Direction::North,
+            Direction::East => Direction::West,
+            Direction::West => Direction::East,
+        }
+    }
+
+    fn convert_direction(self) -> String {
+        match self {
+            Direction::East => "East".to_string(),
+            Direction::North => "North".to_string(),
+            Direction::South => "South".to_string(),
+            Direction::West => "West".to_string(),
         }
     }
 }
@@ -100,6 +131,10 @@ enum Operation {
 fn perform_operation(operation: Operation, num1: f64, num2: f64) -> f64 {
     match operation {
         // TODO
+        Operation::Add => num1 + num2,
+        Operation::Subtract => num1 - num2,
+        Operation::Multiply => num1*num2,
+        Operation::Divide => num1/num2,
     }
 }
 
@@ -132,10 +167,10 @@ mod tests {
 
     #[test]
     fn exercise3_should_work() {
-        assert_eq!(Direction::North.opposite(), Direction::South);
-        assert_eq!(Direction::East.opposite(), Direction::West);
-        assert_eq!(Direction::South.opposite(), Direction::North);
-        assert_eq!(Direction::West.opposite(), Direction::East);
+        assert_eq!(Direction::North.opposite().convert_direction(), Direction::South.convert_direction());
+        assert_eq!(Direction::East.opposite().convert_direction(), Direction::West.convert_direction());
+        assert_eq!(Direction::South.opposite().convert_direction(), Direction::North.convert_direction());
+        assert_eq!(Direction::West.opposite().convert_direction(), Direction::East.convert_direction());
     }
 
     // Test for exercise 4
