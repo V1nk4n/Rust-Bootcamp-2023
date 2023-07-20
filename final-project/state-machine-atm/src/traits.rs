@@ -1,6 +1,14 @@
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 
+#[derive(Hash)]
+enum KeyTest{
+    One,
+    Two,
+    Three,
+    Four
+
+}
 
 /// A state machine - Generic over the transition type
 pub trait StateMachine {
@@ -17,20 +25,18 @@ pub trait StateMachine {
 
 
 // Simple helper to do some hashing.
-fn hash<T>(t: &T) -> u64 {
-    todo!("Final Project");
+pub fn hash<T>(t: &T) -> u64
+where T: std::hash::Hash 
+{
+    let mut s = DefaultHasher::new();
+    t.hash(&mut s);
+    s.finish()
 }
 
 // Test for hash function 
 #[test]
 fn test_hash_enum_vec() {
-    enum KeyTest{
-        One,
-        Two,
-        Three,
-        Four
-
-    }
+    
     let input: Vec<KeyTest> = vec![KeyTest::One, KeyTest::Two, KeyTest::Three, KeyTest::Four];
 
     let hash1 = hash(&input);

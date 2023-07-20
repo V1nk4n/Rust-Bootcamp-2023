@@ -3,6 +3,7 @@
 //! entered the wrong pin.
 
 use crate::traits::StateMachine;
+use crate::traits::hash;
 
 /// The keys on the ATM keypad
 pub enum Key {
@@ -26,7 +27,7 @@ pub enum Action {
 }
 
 /// The various states of authentication possible with the ATM
-enum Auth {
+pub enum Auth {
     /// No session has begun yet. Waiting for the user to swipe their card
     Waiting,
     /// The user has swiped their card, providing the enclosed PIN hash.
@@ -60,27 +61,41 @@ pub struct Atm {
 // Implement trait Default for Auth 
 // return Waiting status 
 impl Default for Auth {
-    
+    fn default() -> Self {
+        Auth::Waiting
+    }
 }
 
 
 //TODO
 // Implement trait From  for &str
 // Convert  elements in Key to &str
-impl From<Key> for &str {
+impl From<Key> for & str {
+    fn from(value: Key) -> Self {
+      match value {
+        Key::One => "1",
+        Key::Two => "2",
+        Key::Three => "3",
+        Key::Four => "4",
+        Key::Enter => "Enter",
+      }
+    }
 }
 
 impl StateMachine for Atm {
     // Notice that we are using the same type for the state as we are using for the machine this time.
-    type State;
-    type Transition;
+    type State = Auth;
+    type Transition = Action;
     // Hint
     // Should use `default` method when auth status is Waiting status
     // Should use `from` method to convert  elements in Key to &str
     // Parse &str to integer to calculate amount
     // Use a hash function to verify the PIN both before and after the user presses the Enter key.
     fn next_state(starting_state: &Self::State, t: &Self::Transition) -> Self::State {
-        todo!("Final project")
+        match (starting_state, t) {
+            
+
+        }
     }
 }
 
